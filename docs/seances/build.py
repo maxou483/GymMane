@@ -176,6 +176,21 @@ def foods():
     return out
 
 
+def consignes_fr():
+    """Consignes traduites (consignes_fr.txt) : une ligne d'identifiant, puis une ligne « - » par étape."""
+    out, cur = {}, None
+    for line in open(os.path.join(HERE, 'consignes_fr.txt'), encoding='utf-8'):
+        line = line.rstrip('\n')
+        if not line.strip():
+            continue
+        if line.startswith('- '):
+            out[cur].append(line[2:])
+        else:
+            cur = line.strip()
+            out[cur] = []
+    return out
+
+
 def awards_fr():
     arb = json.loads(read('lib/l10n/app_fr.arb'))
     ids = ['firstStep', 'firstWorkout', 'firstRoutine', 'firstRecord', 'streak3', 'streak7', 'workouts10', 'tonne1',
@@ -195,6 +210,12 @@ def main():
     fr = json.load(open(os.path.join(HERE, 'noms_fr.json'), encoding='utf-8'))
     for e in ex:
         e['fr'] = fr.get(e['id'], e['en'])
+    steps = consignes_fr()
+    for e in ex:
+        if e['id'] in steps:
+            if len(steps[e['id']]) != len(e['st']):
+                raise SystemExit('Consignes françaises incomplètes pour ' + e['id'])
+            e['st'] = steps[e['id']]
     arts = sorted({e['art'] for e in ex if e['art'] and os.path.exists(os.path.join(ROOT, 'assets/art', e['art'] + '.txt'))})
     for e in ex:
         if e['art'] not in arts:

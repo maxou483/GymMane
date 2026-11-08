@@ -942,7 +942,7 @@ function openExercise(id){
     <div class="chips">${e.kind==='sport'?'<span class="tag acc">Sport</span>':`<span class="tag acc">${MUSCLE[e.p]}</span>`}${e.s.map(m => `<span class="tag">${MUSCLE[m]}</span>`).join('')}<span class="tag">${EQUIP[e.eq]||''}</span><span class="tag">${DIFF[e.d]||''}</span>${isCardio(id)?'<span class="tag">Cardio</span>':isTimed(id)?'<span class="tag">En durée</span>':''}</div>
     <button class="btn ${on?'ghost':''} wide" id="shAdd">${on ? svg('check',16)+' Dans ta séance · retirer' : svg('plus',16)+' Ajouter à ma séance'}</button>
     ${MUSCLE[e.p] ? `<div class="card mini"><h3>Muscles travaillés</h3>${bodyHTML({ cls:m => m === e.p ? 'pri' : e.s.includes(m) ? 'sec' : '', label:'Muscles travaillés' })}<p class="hint">Couleur pleine : muscle principal. Couleur claire : muscles secondaires.</p></div>` : ''}
-    ${e.st.length ? `<div class="card"><h3>Consignes</h3><ol class="steps" lang="en">${e.st.map(s => `<li>${esc(s)}</li>`).join('')}</ol><p class="hint">En anglais, comme dans le catalogue de GymMane.</p></div>` : ''}
+    ${e.st.length ? `<div class="card"><h3>Consignes</h3><ol class="steps">${e.st.map(s => `<li>${esc(s)}</li>`).join('')}</ol></div>` : ''}
     ${past.length ? `<div class="card"><h3>Tes dernières séries</h3><dl class="kv num">${past.map(x => `<dt>${new Date(x.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</dt><dd>${x.kg?nf(x.kg,1)+' kg × ':''}${x.reps||'—'} reps</dd>`).join('')}</dl>${best?`<p class="hint">Record : ${nf(best,1)} kg</p>`:''}</div>` : ''}
     ${chain ? `<div class="card"><h3>Progression</h3><p class="hint">Du plus facile au plus difficile. Passe au suivant quand celui-ci devient facile.</p><div class="chain">${chain.filter(c => EX[c]).map(c => `<button data-chain="${c}" ${c===id?'aria-current="true"':''}>${artHTML(EX[c],'sm')}<span class="grow">${esc(EX[c].fr)}</span>${c===id?'<span class="tag acc">Ici</span>':''}</button>`).join('')}</div></div>` : ''}
     ${similar.length ? `<div class="card"><h3>Exercices similaires</h3><div class="lib">${similar.map(libItem).join('')}</div></div>` : ''}
@@ -1026,7 +1026,7 @@ function renderPlayer(){
          <div class="log">${st.ex.kg?`<div class="field"><label for="inKg">Charge kg</label><input id="inKg" type="number" inputmode="decimal" step="0.5" min="0" value="${lastLog&&lastLog.kg?lastLog.kg:''}" placeholder="0"></div>`:''}
            <div class="field"><label for="inReps">Reps faites</label><input id="inReps" type="number" inputmode="numeric" min="0" value="${(P.log[P.i]&&P.log[P.i].reps)||repsNum}" placeholder="0"></div></div>`}
       ${st.ex.c ? `<p class="cue">${esc(st.ex.c)}</p>` : ''}
-      ${c && c.st.length ? (P.showSteps ? `<ol class="steps" lang="en">${c.st.map(s => `<li>${esc(s)}</li>`).join('')}</ol>` : `<button class="link" id="pSteps">Voir les consignes de GymMane</button>`) : ''}`;
+      ${c && c.st.length ? (P.showSteps ? `<ol class="steps">${c.st.map(s => `<li>${esc(s)}</li>`).join('')}</ol>` : `<button class="link" id="pSteps">Voir les consignes de GymMane</button>`) : ''}`;
   }
   $('#player').innerHTML = `<div class="ov-in">
     <div class="ph-row"><button class="iconbtn" id="pClose" aria-label="Quitter la séance">${svg('x',18)}</button>
